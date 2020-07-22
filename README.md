@@ -1,3 +1,8 @@
+## First !!
+
+This project is a live working project. I will see it to completion at least until it looks completed. You can visit the live project in progress here
+Demo: https://5f17c55af7dbce91d0ce74fd--goofy-euclid-17b9fe.netlify.app/
+
 ## 👉 Get Started
 
 Install dependencies
