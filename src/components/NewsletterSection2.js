@@ -1,0 +1,34 @@
+import React from "react";
+import Section from "./Section";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Newsletter from "./Newsletter";
+
+function NewsletterSection2(props) {
+  return (
+    <Section
+      bg={props.bg}
+      textColor={props.textColor}
+      size={props.size}
+      bgImage={props.bgImage}
+      bgImageOpacity={props.bgImageOpacity}
+    >
+      <Container>
+        <Row className="justify-content-center align-items-center">
+          <Col xs={12} lg={6} className="mt-4 mt-lg-0">
+            <Newsletter
+              parentColor={props.color}
+              buttonText={props.buttonText}
+              inputPlaceholder={props.inputPlaceholder}
+              subscribedMessage={props.subscribedMessage}
+              size="lg"
+            ></Newsletter>
+          </Col>
+        </Row>
+      </Container>
+    </Section>
+  );
+}
+
+export default NewsletterSection2;
