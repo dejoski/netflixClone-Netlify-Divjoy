@@ -1,7 +1,7 @@
 ## First !!
 
 This project is a live working project. I will see it to completion at least until it looks completed. You can visit the live project in progress here
-Demo: https://5f17c55af7dbce91d0ce74fd--goofy-euclid-17b9fe.netlify.app/
+Demo: https://5f1b79972859c24fec52b3d8--netflixclone-divjoy2.netlify.app/
 
 ## 👉 Get Started
 
