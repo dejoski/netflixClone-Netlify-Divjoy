@@ -27,7 +27,7 @@ function FeaturesSection(props) {
             imageRatio="4by3"
             items={[
               {
-                title: "Lorem Ipsum",
+                title: "Stop scraping manually",
                 body:
                   "Integer ornare neque mauris, ac vulputate lacus venenatis et. Pellentesque ut ultrices purus.",
                 image: "https://uploads.divjoy.com/undraw-fish_bowl_uu88.svg",
