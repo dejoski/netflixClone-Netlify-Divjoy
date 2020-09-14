@@ -20,7 +20,12 @@ function HeroSection(props) {
           size={1}
           spaced={true}
         ></SectionHeader>
-        <NewsletterSection2
+        <form action="https://lively-aromatic-doll.glitch.me" method="GET">
+          <input type="text" name="values" placeholder="Value here" /> 
+          <input type="text" name="urls" placeholder="Full URL" /> 
+          <input type="submit" /> 
+        </form>
+        {/* <NewsletterSection2
           bg="light"
           textColor="dark"
           size="md"
@@ -32,7 +37,7 @@ function HeroSection(props) {
           buttonColor="primary"
           inputPlaceholder="Enter your email"
           subscribedMessage="You are now subscribed!"
-        ></NewsletterSection2>
+        ></NewsletterSection2> */}
       </Container>
     </Section>
   );

@@ -16,7 +16,7 @@ function IndexPage(props) {
         size="lg"
         bgImage=""
         bgImageOpacity={1}
-        title="Your landing page title here"
+        title="We Price for YOU!"
         subtitle="This landing page is perfect for showing off your awesome product and driving people to sign up for a paid plan."
         buttonText="Start Free Trial"
         buttonColor="light"
