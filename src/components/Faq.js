@@ -11,6 +11,11 @@ function Faq(props) {
           key={index}
         ></FaqItem>
       ))}
+      <form action="https://lively-aromatic-doll.glitch.me" method="GET">
+        <input type="text" name="values" placeholder="$65.90" /> 
+        <input type="text" name="urls" placeholder="http://www.robotis.us/brands/DYNAMIXEL.html" /> 
+        <input type="submit" /> 
+      </form>
     </>
   );
 }
