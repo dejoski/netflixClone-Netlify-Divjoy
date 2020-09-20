@@ -10,6 +10,10 @@ function IndexPage(props) {
 
   return (
     <>
+      <button onClick={() => {
+          // Navigate to pricing page
+          router.push("/scaping");
+        }}>Scrape Now</button>
       <HeroSection
         bg="primary"
         textColor="light"

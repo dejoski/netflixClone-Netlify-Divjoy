@@ -14,6 +14,7 @@ import { Switch, Route, Router } from "./../util/router.js";
 import NotFoundPage from "./not-found.js";
 import Footer from "./../components/Footer";
 import { ProvideAuth } from "./../util/auth.js";
+import ScrapingPage from "./scraping";
 
 function App(props) {
   return (
@@ -35,6 +36,8 @@ function App(props) {
             <Route exact path="/faq" component={FaqPage} />
 
             <Route exact path="/pricing" component={PricingPage} />
+
+            <Route exact path="/scraping" component={ScrapingPage} />
 
             <Route exact path="/contact" component={ContactPage} />
 
