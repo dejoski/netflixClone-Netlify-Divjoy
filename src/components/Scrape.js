@@ -16,7 +16,7 @@ function Scrape(props) {
       <p>Hello World</p>
       <input placeholder="What's your URL" value={url} onChange={e=>setUrl(e.target.value)} /><button onClick={()=>alert(url)}>Submit</button>
       <iframe src={url}  onChange={(e)=>console.log(e)} />
-
+      
     </div>
     
   );
