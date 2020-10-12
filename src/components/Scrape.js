@@ -7,6 +7,8 @@ import { LinkContainer } from "react-router-bootstrap";
 import { useAuth } from "../util/auth.js";
 import Spinner from "react-bootstrap/Spinner";
 import "./Scrape.scss";
+import { CSVLink, CSVDownload } from "react-csv";
+
 
 function getSelector(_context) {
   var index,
@@ -45,18 +47,12 @@ function getIndex(node) {
 function Scrape(props) {
   const auth = useAuth();
   const [url, setUrl] = useState("http://robotis.us");
-  const [html, setHtml] = useState("<p>Testing</p>");
+  const [html, setHtml] = useState("");
   const [pending, setPending] = useState(false);
   const [selecting, setSelecting] = useState(false);
-  const [selectedObjects, setSelectedObjects] = useState([
-    {
-      selector:
-        "html>body>div>section>div>div>div>div>div>div>div>…v>div>div>section>div>div>div>span:nth-of-type(1)",
-      value: "$2,530.76",
-      element: "span.price.price--withoutTax",
-    },
-  ]);
-
+  const [selectedObjects, setSelectedObjects] = useState([]);
+  const [csvData, setCsvData] = useState([]);
+  console.log(process.env)
   useEffect(() => {
     console.log(selecting);
   }, [selecting]);
@@ -64,11 +60,35 @@ function Scrape(props) {
     console.log(selectedObjects);
   }, [selectedObjects]);
 
+  function handleSubmit(){
+    
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = false;
+    console.log("url", url);
+    setPending(true);
+    var data = JSON.stringify(selectedObjects)
+    let host = process.env.SERVERURL
+    xhr.open("POST", host+"/submit?url=" + url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
+    xhr.onreadystatechange = function () {
+      if (this.readyState !== 4) return;
+      if (this.status !== 200) return; // or whatever error handling you want
+      // document.getElementById("y").innerHTML = this.responseText;
+      // setHtml(this.responseText);
+      setCsvData(JSON.parse(JSON.parse(this.responseText)));
+      setPending(false);
+
+    };
+    xhr.send(data);
+  }
+
   function getHtml(url) {
     var xhr = new XMLHttpRequest();
     console.log("url", url);
     setPending(true);
-    xhr.open("GET", "http://127.0.0.1:5000/html?url=" + url, true);
+    let host = process.env.SERVERURL
+    xhr.open("GET", host+"/html?url=" + url, true);
     // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
     xhr.onreadystatechange = function () {
       if (this.readyState !== 4) return;
@@ -90,33 +110,69 @@ function Scrape(props) {
 
   return (
     <div style={{ textAlign: "-webkit-center" }}>
-      <p>Hello World</p>
       <input
         placeholder="What's your URL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
       />
-      <button onClick={() => alert(url)}>Submit</button>
       <button onClick={(e) => getHtml(url)}>Get Url</button>
-      {!pending && (
+      {!pending && html && (
         <>
           <div style={{ width: "50%", float: "right" }}>
-            <input
+            {/* <input
               type="checkbox"
               onClick={(e) => setSelecting(e.target.checked)}
-            />
+            /> */}
             <label>Start selecting elements to scan</label>
-            List of selected items to collect
             <table>
-            {selectedObjects.map((each, i) => {
-              console.log("Loading the list", selectedObjects);
-              return <tr  key={i}><td><button onClick={(e)=>setSelectedObjects(selectedObjects.filter(item => item.value !== each.value))}>❌</button>{each.value}</td><td><input placeholder="Title" onChange={(e)=>{
-                let objects = selectedObjects.slice();
-                objects[i].title = e.target.value;
-                setSelectedObjects(objects);
-                console.log(selectedObjects);
-              } } value={each.title}/></td></tr>;
-            })}</table>
+              {selectedObjects.length !== 0 ? (
+                <>
+                  <thead>
+                    <td>Selected Text</td>
+                    <td>Title of Column</td>
+                  </thead>
+                  <tbody>
+                    {selectedObjects.map((each, i) => {
+                      console.log("Loading the list", selectedObjects);
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <button
+                              onClick={(e) =>
+                                setSelectedObjects(
+                                  selectedObjects.filter(
+                                    (item) => item.value !== each.value
+                                  )
+                                )
+                              }
+                            >
+                              <span role='img' aria-label="X">❌</span>
+                            </button>
+                            {each.value}
+                          </td>
+                          <td>
+                            <input
+                              placeholder="Title"
+                              onChange={(e) => {
+                                let objects = selectedObjects.slice();
+                                objects[i].title = e.target.value;
+                                setSelectedObjects(objects);
+                                console.log(selectedObjects);
+                              }}
+                              value={each.title}
+                            />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                  <button onClick={handleSubmit}>Submit</button>
+                  {csvData.length!==0?
+                  <>
+  <CSVLink data={csvData}>Download me</CSVLink><button onClick={()=>alert("Feature is still under construction. Try again in a few days")}>Save/Schedule Bot</button></>:null}
+                </>
+              ) : null}
+            </table>
           </div>
           <div
             style={{ width: "50%", float: "left" }}
@@ -132,12 +188,14 @@ function Scrape(props) {
               } catch (err) {
                 alert(err.message);
               }
-              setSelectedObjects(selectedObjects.concat({
-                selector: c,
-                value: element.textContent,
-                element: element,
-                title: '',
-              }));
+              setSelectedObjects(
+                selectedObjects.concat({
+                  selector: c,
+                  value: element.textContent,
+                  element: element,
+                  title: "",
+                })
+              );
               console.log(selectedObjects, typeof selectedObjects);
             }}
             className="content"
