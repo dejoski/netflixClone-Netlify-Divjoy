@@ -67,7 +67,7 @@ function Scrape(props) {
     console.log("url", url);
     setPending(true);
     var data = JSON.stringify(selectedObjects)
-    let host = process.env.SERVERURL
+    let host = http://127.0.0.1:5000
     xhr.open("POST", host+"/submit?url=" + url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
@@ -87,7 +87,7 @@ function Scrape(props) {
     var xhr = new XMLHttpRequest();
     console.log("url", url);
     setPending(true);
-    let host = process.env.SERVERURL
+    let host = http://127.0.0.1:5000
     xhr.open("GET", host+"/html?url=" + url, true);
     // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
     xhr.onreadystatechange = function () {
