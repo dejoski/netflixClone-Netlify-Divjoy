@@ -1,6 +1,7 @@
 [build]
   publish = "build"
-  command = "npm run build"
+  command = "CI= npm run build"
+  functions = "api"
 
 # Rewrite API requests to actual location of serverless functions
 [[redirects]]
