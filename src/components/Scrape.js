@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
-import { LinkContainer } from "react-router-bootstrap";
-import { useAuth } from "../util/auth.js";
 import Spinner from "react-bootstrap/Spinner";
 import "./Scrape.scss";
 import { CSVLink, CSVDownload } from "react-csv";
 
-
 function getSelector(_context) {
   var index,
-    localName,
     pathSelector,
     that = _context,
     node;
@@ -44,15 +36,14 @@ function getIndex(node) {
   return i;
 }
 
-function Scrape(props) {
-  const auth = useAuth();
+function Scrape() {
   const [url, setUrl] = useState("http://robotis.us");
   const [html, setHtml] = useState("");
   const [pending, setPending] = useState(false);
   const [selecting, setSelecting] = useState(false);
   const [selectedObjects, setSelectedObjects] = useState([]);
   const [csvData, setCsvData] = useState([]);
-  console.log(process.env)
+  console.log(process.env);
   useEffect(() => {
     console.log(selecting);
   }, [selecting]);
@@ -60,15 +51,14 @@ function Scrape(props) {
     console.log(selectedObjects);
   }, [selectedObjects]);
 
-  function handleSubmit(){
-    
+  function handleSubmit() {
     var xhr = new XMLHttpRequest();
     xhr.withCredentials = false;
     console.log("url", url);
     setPending(true);
-    var data = JSON.stringify(selectedObjects)
-    let host = "http://127.0.0.1:5000"
-    xhr.open("POST", host+"/submit?url=" + url, true);
+    var data = JSON.stringify(selectedObjects);
+    let host = "http://127.0.0.1:5000";
+    xhr.open("POST", host + "/submit?url=" + url, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
     xhr.onreadystatechange = function () {
@@ -78,36 +68,59 @@ function Scrape(props) {
       // setHtml(this.responseText);
       setCsvData(JSON.parse(JSON.parse(this.responseText)));
       setPending(false);
-
     };
     xhr.send(data);
   }
-
+  function WhilePending() {
+    return (
+      <>
+        <Spinner
+          animation="border"
+          size="sm"
+          role="status"
+          aria-hidden={true}
+          className="align-baseline"
+        >
+          <span className="sr-only">Loading...</span>
+        </Spinner>
+        <p>This process may take a minute, please wait.</p>
+      </>
+    );
+  }
   function getHtml(url) {
     var xhr = new XMLHttpRequest();
     console.log("url", url);
     setPending(true);
-    let host = "http://127.0.0.1:5000"
-    xhr.open("GET", host+"/html?url=" + url, true);
+    let host = "http://127.0.0.1:5000";
+    xhr.open("GET", host + "/html?url=" + url, true);
     // xhr.open('GET', 'C:/Users/DejanStajic/OneDrive - 10jin Solutions/Documents/GitHub/MagicScraper/html2.html', true);
     xhr.onreadystatechange = function () {
       if (this.readyState !== 4) return;
-      if (this.status !== 200) return; // or whatever error handling you want
-      // document.getElementById("y").innerHTML = this.responseText;
+      if (this.status !== 200) return;
       setHtml(this.responseText);
       console.log(this.responseText);
       setPending(false);
     };
     xhr.send();
-    // var rightArrowParents = [];
-    // var entry = this.tagName.toLowerCase();
-    // if (this.className) {
-    //   entry += "." + this.className.replace(/ /g, ".");
-    // }
-    // rightArrowParents.push(entry);
-    // alert(rightArrowParents.join(" "));
   }
-
+  function afterCsv() {
+    return (
+      <>
+        <CSVLink data={csvData} filename="MagicScraper.csv">
+          Download me
+        </CSVLink>
+        <button
+          onClick={() =>
+            alert(
+              "Feature is still under construction. Try again in a few days"
+            )
+          }
+        >
+          Save/Schedule Bot
+        </button>
+      </>
+    );
+  }
   return (
     <div style={{ textAlign: "-webkit-center" }}>
       <input
@@ -119,10 +132,6 @@ function Scrape(props) {
       {!pending && html && (
         <>
           <div style={{ width: "50%", float: "right" }}>
-            {/* <input
-              type="checkbox"
-              onClick={(e) => setSelecting(e.target.checked)}
-            /> */}
             <label>Start selecting elements to scan</label>
             <table>
               {selectedObjects.length !== 0 ? (
@@ -133,7 +142,6 @@ function Scrape(props) {
                   </thead>
                   <tbody>
                     {selectedObjects.map((each, i) => {
-                      console.log("Loading the list", selectedObjects);
                       return (
                         <tr key={i}>
                           <td>
@@ -146,7 +154,9 @@ function Scrape(props) {
                                 )
                               }
                             >
-                              <span role='img' aria-label="X">❌</span>
+                              <span role="img" aria-label="X">
+                                ❌
+                              </span>
                             </button>
                             {each.value}
                           </td>
@@ -157,7 +167,6 @@ function Scrape(props) {
                                 let objects = selectedObjects.slice();
                                 objects[i].title = e.target.value;
                                 setSelectedObjects(objects);
-                                console.log(selectedObjects);
                               }}
                               value={each.title}
                             />
@@ -167,9 +176,7 @@ function Scrape(props) {
                     })}
                   </tbody>
                   <button onClick={handleSubmit}>Submit</button>
-                  {csvData.length!==0?
-                  <>
-  <CSVLink data={csvData}>Download me</CSVLink><button onClick={()=>alert("Feature is still under construction. Try again in a few days")}>Save/Schedule Bot</button></>:null}
+                  {csvData.length !== 0 ? afterCsv() : null}
                 </>
               ) : null}
             </table>
@@ -179,9 +186,7 @@ function Scrape(props) {
             onClick={(e) => {
               var c = getSelector(e.target);
               var element = document.querySelector(c);
-              console.log(element);
-              console.log(c);
-              //element.style.color = "red"
+              // TODO: Ask which element or get the one they clicked
               try {
                 e.preventDefault();
                 e.stopPropagation();
@@ -203,22 +208,7 @@ function Scrape(props) {
           ></div>
         </>
       )}
-      {pending && (
-        <>
-          <Spinner
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden={true}
-            className="align-baseline"
-          >
-            <span className="sr-only">Loading...</span>
-          </Spinner>
-          <p>This process may take a minute, please wait.</p>
-        </>
-      )}
-
-      {/* <iframe src={url}  onChange={(e)=>console.log(e)} /> */}
+      {pending && WhilePending()}
     </div>
   );
 }

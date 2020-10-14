@@ -1,7 +1,16 @@
-.content {
+// * :not(.content){
+//     all: initial;
+// }
+
+input {
+    float: initial !important;
+}
+
+.content *{
     :hover {
         background-color: yellow;
       }
+   
   }
   
   
