@@ -52,7 +52,7 @@ function App(props) {
             <Route component={NotFoundPage} />
           </Switch>
 
-          <Footer
+          {/* <Footer
             bg="white"
             textColor="dark"
             size="md"
@@ -61,7 +61,7 @@ function App(props) {
             description="A short description of what you do here"
             copyright="© 2019 Company"
             logo="https://uploads.divjoy.com/logo.svg"
-          ></Footer>
+          ></Footer> */}
         </>
       </Router>
     </ProvideAuth>
